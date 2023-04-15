@@ -1,11 +1,15 @@
 package fr.stayze;
 
+import fr.stayze.database.Database;
 import fr.stayze.web.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class MCWebPanel extends JavaPlugin {
+
+    private static MCWebPanel instance;
 
     private Server server;
 
@@ -14,20 +18,25 @@ public class MCWebPanel extends JavaPlugin {
         try {
             this.init();
             System.out.println("Plugin loaded ! okayyyyy");
-        } catch (IOException e) {
-            System.out.println("Error : " + e.getMessage());
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            //System.out.println("Error : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private void init() throws IOException {
-
+    private void init() throws IOException, SQLException, ClassNotFoundException {
+        instance = this;
         this.server = new Server(8080);
-        System.out.println("OK");
-
+        new Database();
     }
 
     @Override
     public void onDisable() {
         this.server.stop();
     }
+
+    public static MCWebPanel getInstance() {
+        return instance;
+    }
+    
 }
