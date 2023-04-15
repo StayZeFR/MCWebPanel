@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="MCWebPanel:jar">
+    <output-path>$PROJECT_DIR$/../../../Serveur MC/Serveur 1.19.2/plugins</output-path>
+    <root id="archive" name="MCWebPanel.jar">
+      <element id="module-output" name="MCWebPanel" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Dependencies/jar/mustache-0.9.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Dependencies/jar/nanohttpd-2.3.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

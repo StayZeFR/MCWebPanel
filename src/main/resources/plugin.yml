@@ -1,0 +1,5 @@
+name: "MCWebPanel"
+version: "1.0.0"
+author: "StayZe"
+main: fr.stayze.MCWebPanel
+api-version: 1.16

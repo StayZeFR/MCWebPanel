@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="mustache-0.9.10">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Dependencies/jar/mustache-0.9.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Dependencies/jar/nanohttpd-2.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Dependencies/jar/spigot-1.16.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../Dependencies/jar/spigot-1.16.5.jar!/" />
+    </SOURCES>
+  </library>
+</component>
