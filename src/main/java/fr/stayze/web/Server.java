@@ -25,40 +25,41 @@ public class Server extends NanoHTTPD {
     @Override
     public Response serve(IHTTPSession session) {
 
-        try {
+        Map<String, String> model = new HashMap<String, String>();
+        model.put("TITLE", "MCWebPanel");
 
-            Map<String, String> model = new HashMap<String, String>();
-            model.put("TITLE", "MCWebPanel");
+        try {
 
             String uri = session.getUri();
             String method = session.getMethod().toString();
-            System.out.println(method);
             Map<String, String> headers = session.getHeaders();
             Map<String, String> params = new HashMap<String, String>();
 
             session.parseBody(params);
 
-            if (!isUserLoggedIn(session) && !"/login".equals(uri)) return redirect("/login");
+            //if (!isUserLoggedIn(session) && !"/login".equals(uri)) return redirect("/login");
             if ("/".equals(uri)) {
                 return newFixedLengthResponse(Response.Status.OK, "text/html", Template.getTemplate("templates/index.html", model));
             } else if ("/login".equals(uri)) {
-                if (isUserLoggedIn(session)) return newFixedLengthResponse(Response.Status.OK, "text/html", Template.getTemplate("templates/index.html", model));
-                else return newFixedLengthResponse(Response.Status.OK, "text/html", Template.getTemplate("templates/login.html", model));
+                if (isUserLoggedIn(session)) {
+                    return newFixedLengthResponse(Response.Status.OK, "text/html", Template.getTemplate("templates/index.html", model));
+                } else {
+                    return newFixedLengthResponse(Response.Status.OK, "text/html", Template.getTemplate("templates/login.html", model));
+                }
             } else {
                 return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "404 Not Found");
             }
         } catch (IOException | ResponseException | SQLException ex) { throw new RuntimeException(ex); }
-
     }
 
     public static boolean isUserLoggedIn(IHTTPSession session) throws SQLException {
         return session != null && session.getParms().containsKey("id") && (DBUser.isUserHaveSession((Integer.parseInt(session.getParms().get("id"))), session.getParms().get("token")));
     }
 
-    public static Response redirect(String path) {
+    /*public static Response redirect(String path) {
         Response response = newFixedLengthResponse(Response.Status.REDIRECT, "text/plain", "Redirection en cours");
         response.addHeader("Location", path);
         return response;
-    }
+    }*/
 
 }
