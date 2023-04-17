@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Query {
+public abstract class Query {
 
     protected Connection database;
     protected String table;
