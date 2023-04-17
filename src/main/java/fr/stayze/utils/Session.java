@@ -1,12 +1,14 @@
-package fr.stayze.database;
+package fr.stayze.utils;
 
+import fr.stayze.database.Database;
+
+import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.Base64;
 
-public class DBUser {
-
+public class Session {
     public static boolean isUserHaveSession(int id, String token) throws SQLException {
         String sql = "SELECT * FROM SESSION WHERE ID_USER = ? AND TOKEN = ?;";
         PreparedStatement query = Database.getConnection().prepareStatement(sql);
@@ -18,7 +20,7 @@ public class DBUser {
         return count > 0;
     }
 
-    public static void insertToken(int id, String token) throws SQLException {
+    public static void createSession(int id, String token) throws SQLException {
         String sql = "SELECT * FROM SESSION WHERE ID_USER = ?;";
         PreparedStatement query = Database.getConnection().prepareStatement(sql);
         query.setInt(1, id);
@@ -33,6 +35,13 @@ public class DBUser {
         query2.setInt(1, id);
         query2.setString(2, token);
         query2.execute();
+    }
+
+    public static String generateToken() {
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[192];
+        random.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
 }
