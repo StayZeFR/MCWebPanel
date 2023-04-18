@@ -2,7 +2,6 @@ package fr.stayze;
 
 import fi.iki.elonen.NanoHTTPD;
 import fr.stayze.database.Database;
-import fr.stayze.utils.Session;
 import fr.stayze.web.WebServer;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,7 +13,6 @@ public class MCWebPanel extends JavaPlugin {
     private static MCWebPanel instance;
 
     private WebServer server;
-    private Database database;
 
     @Override
     public void onEnable() {
@@ -30,7 +28,7 @@ public class MCWebPanel extends JavaPlugin {
     private void init() throws IOException, SQLException, ClassNotFoundException {
         instance = this;
         this.server = new WebServer(8080);
-        this.database = new Database();
+        Database.connect();
         this.server.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
     }
 

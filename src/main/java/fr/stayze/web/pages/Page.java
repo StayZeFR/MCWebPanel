@@ -6,6 +6,7 @@ import com.github.mustachejava.MustacheFactory;
 import fi.iki.elonen.NanoHTTPD;
 import fr.stayze.MCWebPanelConfig;
 import fr.stayze.utils.ResourceLoader;
+import fr.stayze.utils.Utils;
 
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public abstract class Page {
 
     private final String templatesDir = "html/";
 
+    protected Map<String, String> headers;
     protected NanoHTTPD.Response response;
     protected NanoHTTPD.IHTTPSession session;
     protected NanoHTTPD.Method method;
@@ -27,6 +29,7 @@ public abstract class Page {
         this.session = session;
         this.method = this.session.getMethod();
         this.response = null;
+        this.headers = session.getHeaders();
 
         this.data = new HashMap<String, String>();
         this.data.put("TITLE", MCWebPanelConfig.PL_NAME.getConfig());
@@ -42,10 +45,12 @@ public abstract class Page {
         }
     }
 
-    protected abstract void GET();
+    protected void GET() {
+        if (!Utils.haveSession(this.session)) this.redirect("login.html", "/login");
+    }
     protected abstract void POST();
 
-    private NanoHTTPD.Response render() {
+    protected NanoHTTPD.Response render() {
         MustacheFactory mustacheFactory = new DefaultMustacheFactory();
         Mustache mustache = mustacheFactory.compile(this.templatesDir + this.templateName);
         StringWriter writer = new StringWriter();
@@ -53,8 +58,15 @@ public abstract class Page {
         return newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "text/html", writer.toString());
     }
 
-    public NanoHTTPD.Response getResponse() {
+    protected void redirect(String templateName, String path) {
+        this.templateName = templateName;
         this.response = this.render();
+        this.response.addHeader("Location", path);
+        this.response.setStatus(NanoHTTPD.Response.Status.REDIRECT);
+    }
+
+    public NanoHTTPD.Response getResponse() {
+        if (this.response == null) this.response = this.render();
         return this.response;
     }
 

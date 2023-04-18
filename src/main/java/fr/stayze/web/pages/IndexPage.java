@@ -10,11 +10,6 @@ public class IndexPage extends Page {
     }
 
     @Override
-    protected void GET() {
-
-    }
-
-    @Override
     protected void POST() {
 
     }
