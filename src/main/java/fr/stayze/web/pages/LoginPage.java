@@ -4,25 +4,24 @@ import fi.iki.elonen.NanoHTTPD;
 import fr.stayze.database.Database;
 import fr.stayze.utils.PasswordEncoder;
 import fr.stayze.utils.Utils;
+import org.bukkit.Bukkit;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class LoginPage extends Page {
 
     public LoginPage(NanoHTTPD.IHTTPSession session) {
         super(session);
-        this.templateName = "login.html";
+        this.data.put("MAIN", this.construct(this.subData, "login.html"));
     }
 
     @Override
     protected void GET() {
-        if (Utils.haveSession(this.session)) {
-            System.out.println("s ok");
-            this.redirect("index.html", "/");
-        }
+        if (Utils.haveSession(this.session)) {this.redirect("/");}
     }
 
     @Override
@@ -34,12 +33,11 @@ public class LoginPage extends Page {
             if (!user.containsKey("ID")) user = Database.user().find("EMAIL", data.get("username"));
             if (user.containsKey("ID")) {
                 if (PasswordEncoder.compare(data.get("password"), user.get("PASSWORD"))) {
-                    this.redirect("index.html", "/");
+                    this.redirect("/");
                     String token = Utils.generateToken();
-                    this.response.addHeader("Set-Cookie", "ID=" + user.get("ID"));
-                    this.response.addHeader("Set-Cookie", "TOKEN=" + token);
+                    this.response.addHeader("Set-Cookie", "TOKEN=" + token + ";");
+                    Database.session().delete("ID_USER", Integer.parseInt(user.get("ID")));
                     Database.session().insert(Integer.parseInt(user.get("ID")), token);
-                    System.out.println("OK");
                 } else {
                     // Error password !
                 }

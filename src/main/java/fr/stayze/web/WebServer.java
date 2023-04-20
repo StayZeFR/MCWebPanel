@@ -26,6 +26,7 @@ public class WebServer extends NanoHTTPD {
 
             String uri = session.getUri();
             Page page = null;
+            Response response = null;
 
             Map<String, String> headers = session.getHeaders();
 
@@ -39,20 +40,20 @@ public class WebServer extends NanoHTTPD {
                     page = new LoginPage(session);
                 }
                 case "/exit" -> {
-                    System.out.println(1);
-                    page = new LoginPage(session);
+                    response = newFixedLengthResponse("");
+                    response.addHeader("Location", "/login");
+                    response.setStatus(NanoHTTPD.Response.Status.REDIRECT);
                     Map<String, String> cookies = Utils.parseCookie(session.getHeaders().get("cookie"));
-                    Database.session().delete("ID_USER", Integer.parseInt(cookies.get("ID")));
-                    page.getResponse().addHeader("Set-Cookie", "ID=;expires=Thu, 01 Jan 1970 00:00:00 GMT");
-                    page.getResponse().addHeader("Set-Cookie", "TOKEN=;expires=Thu, 01 Jan 1970 00:00:00 GMT");
-                    System.out.println("OK");
+                    Map<String, String> _session = Database.session().find("TOKEN", cookies.get("TOKEN"));
+                    Database.session().delete("ID_USER", Integer.parseInt(_session.get("ID_USER")));
                 }
                 default -> {
                     page = new NotFoundPage(session);
                 }
             }
 
-            return page.getResponse();
+            response = (page == null ? response : page.getResponse());
+            return response;
 
         } catch (IOException | ResponseException | SQLException e) {
             throw new RuntimeException(e);

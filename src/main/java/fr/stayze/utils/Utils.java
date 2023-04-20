@@ -35,12 +35,23 @@ public class Utils {
     public static boolean haveSession(NanoHTTPD.IHTTPSession session) {
         try {
             Map<String, String> cookies = Utils.parseCookie(session.getHeaders().get("cookie"));
-            if (cookies.containsKey("ID") && cookies.containsKey("TOKEN")) {
-                Map<String, String> _session = Database.session().find("ID_USER", Integer.parseInt(cookies.get("ID")));
-                return (!_session.isEmpty() && _session.get("ID_USER").equals(cookies.get("ID")) && _session.get("TOKEN").equals(cookies.get("TOKEN")));
+            if (cookies.containsKey("TOKEN")) {
+                Map<String, String> _session = Database.session().find("TOKEN", cookies.get("TOKEN"));
+                return !_session.isEmpty();
             }
         } catch (SQLException e) { throw new RuntimeException(e); }
         return false;
+    }
+
+    public static Map<String, String> getUserByToken(NanoHTTPD.IHTTPSession session) {
+        try {
+            Map<String, String> cookies = Utils.parseCookie(session.getHeaders().get("cookie"));
+            if (cookies.containsKey("TOKEN")) {
+                Map<String, String> _session = Database.session().find("TOKEN", cookies.get("TOKEN"));
+                return Database.user().find("ID", Integer.parseInt(_session.get("ID_USER")));
+            }
+        } catch (SQLException e) { throw new RuntimeException(e); }
+        return null;
     }
 
 }
