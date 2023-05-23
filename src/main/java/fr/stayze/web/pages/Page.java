@@ -7,6 +7,7 @@ import fi.iki.elonen.NanoHTTPD;
 import fr.stayze.MCWebPanelConfig;
 import fr.stayze.utils.ResourceLoader;
 import fr.stayze.utils.Utils;
+import fr.stayze.web.View;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
 
-public abstract class Page {
+public abstract class Page extends View {
 
     private final String renderFile = "html/render.html";
     private final String templatesDir = "html/templates/";
@@ -24,9 +25,6 @@ public abstract class Page {
     protected NanoHTTPD.Response response;
     protected NanoHTTPD.IHTTPSession session;
     protected NanoHTTPD.Method method;
-    protected Map<String, String> data;
-    protected String main;
-    protected Map<String, Object> subData;
 
     public Page(NanoHTTPD.IHTTPSession session) {
         this.session = session;
@@ -34,10 +32,8 @@ public abstract class Page {
         this.response = null;
         this.headers = session.getHeaders();
 
-        this.subData = new HashMap<String, Object>();
         this.data = new HashMap<String, String>();
         this.data.put("TITLE", MCWebPanelConfig.PL_NAME.getConfig());
-        this.data.put("STYLE", ResourceLoader.loadFile("html/static/styles.css"));
 
         switch (method.toString()) {
             case "GET" -> {
@@ -55,18 +51,6 @@ public abstract class Page {
         }
     }
     protected abstract void POST();
-
-    protected NanoHTTPD.Response render() {
-        try {
-            MustacheFactory mustacheFactory = new DefaultMustacheFactory();
-            StringWriter writer = new StringWriter();
-            Mustache render = mustacheFactory.compile(this.renderFile);
-            render.execute(writer, this.data).flush();
-            return newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "text/html", writer.toString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     protected void redirect(String path) {
         this.response = newFixedLengthResponse("Redirection...");

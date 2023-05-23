@@ -1,8 +1,8 @@
 package fr.stayze.database;
 
 import fr.stayze.MCWebPanel;
-import fr.stayze.database.query.Session;
-import fr.stayze.database.query.User;
+import fr.stayze.database.query.SessionQuery;
+import fr.stayze.database.query.UserQuery;
 import fr.stayze.utils.ResourceLoader;
 
 import java.sql.Connection;
@@ -13,8 +13,8 @@ import java.sql.Statement;
 public class Database {
 
     private static Connection database;
-    private static Session session;
-    private static User user;
+    private static SessionQuery session;
+    private static UserQuery user;
 
     public static void connect() throws SQLException, ClassNotFoundException {
         database = null;
@@ -30,12 +30,12 @@ public class Database {
         Statement statement = getConnection().createStatement();
         statement.executeUpdate(sql);
 
-        session = new Session();
-        user = new User();
+        session = new SessionQuery();
+        user = new UserQuery();
     }
 
-    public static Session session() { return session; }
-    public static User user() { return user; }
+    public static SessionQuery session() { return session; }
+    public static UserQuery user() { return user; }
     public static Connection getConnection() { return database; }
 
 }

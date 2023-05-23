@@ -5,9 +5,9 @@ import fr.stayze.database.Database;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Session extends Query {
+public class SessionQuery extends Query {
 
-    public Session() {
+    public SessionQuery() {
         this.table = "SESSION";
     }
 

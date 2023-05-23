@@ -10,8 +10,7 @@ public class PasswordEncoder {
     public static String encode(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] hash = md.digest(password.getBytes("UTF-8"));
-        String encoded = Base64.getEncoder().encodeToString(hash);
-        return encoded;
+        return Base64.getEncoder().encodeToString(hash);
     }
 
     public static boolean compare(String password, String hash) throws UnsupportedEncodingException, NoSuchAlgorithmException {

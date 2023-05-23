@@ -1,8 +1,8 @@
 package fr.stayze.database.query;
 
-public class User extends Query {
+public class UserQuery extends Query {
 
-    public User() {
+    public UserQuery() {
         this.table = "USER";
     }
 

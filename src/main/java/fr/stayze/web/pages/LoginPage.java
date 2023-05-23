@@ -4,19 +4,17 @@ import fi.iki.elonen.NanoHTTPD;
 import fr.stayze.database.Database;
 import fr.stayze.utils.PasswordEncoder;
 import fr.stayze.utils.Utils;
-import org.bukkit.Bukkit;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class LoginPage extends Page {
 
     public LoginPage(NanoHTTPD.IHTTPSession session) {
         super(session);
-        this.data.put("MAIN", this.construct(this.subData, "login.html"));
+        //this.data.put("MAIN", this.construct(this.subData, "login.html"));
     }
 
     @Override
