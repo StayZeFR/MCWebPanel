@@ -3,6 +3,7 @@ package fr.stayze.app;
 import fi.iki.elonen.NanoHTTPD;
 import fr.stayze.app.systems.routes.RoutesManager;
 import fr.stayze.app.views.Index;
+import fr.stayze.app.views.Test;
 
 public class Application extends NanoHTTPD {
 
@@ -10,14 +11,13 @@ public class Application extends NanoHTTPD {
 
     public Application(int port) throws InstantiationException, IllegalAccessException {
         super(port);
-        //this._ROUTES = new RoutesManager();
-        //this.initRoutes();
-        //System.out.println("OKAYYYYY");
+        this._ROUTES = new RoutesManager();
+        this.initRoutes();
     }
 
     private void initRoutes() throws InstantiationException, IllegalAccessException {
         this._ROUTES.get("/", Index.class);
-        this._ROUTES.get("/test", Index.class);
+        this._ROUTES.get("/test", Test.class);
     }
 
     @Override

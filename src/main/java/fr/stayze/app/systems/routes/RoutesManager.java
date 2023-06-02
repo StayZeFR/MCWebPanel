@@ -2,6 +2,7 @@ package fr.stayze.app.systems.routes;
 
 import fr.stayze.app.models.Model;
 import fr.stayze.app.views.View;
+import fr.stayze.app.views.errors.NotFound;
 
 import java.util.HashMap;
 
@@ -14,8 +15,8 @@ public class RoutesManager {
     }
 
     public String check(String uri) {
-        Route route = this._ROUTES.get(uri);
-        return route.getVIEW().get();
+        uri = uri.toLowerCase();
+        return (this._ROUTES.containsKey(uri) ? this._ROUTES.get(uri).getVIEW().get() : new NotFound().get());
     }
 
     public void get(String uri, Class<?> clazz) throws InstantiationException, IllegalAccessException {

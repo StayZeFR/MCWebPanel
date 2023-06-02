@@ -22,7 +22,7 @@ public class MCWebPanel extends JavaPlugin {
     public void onEnable() {
         try {
             this.init();
-            System.out.println("Plugin loaded ! okayyyyy");
+            System.out.println("Plugin loaded !");
         } catch (IOException | SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             //System.out.println("Error : " + e.getMessage());
             e.printStackTrace();
@@ -33,6 +33,7 @@ public class MCWebPanel extends JavaPlugin {
         instance = this;
         //this.server = new WebServer(8080);
         this.server = new Application(8080);
+        this.server.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
         System.out.println(this.server.isAlive());
         Database.connect();
         /*this.server.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);

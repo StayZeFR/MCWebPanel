@@ -1,6 +1,5 @@
-package fr.stayze.web;
+package fr.stayze.app.systems;
 
-import fi.iki.elonen.NanoHTTPD;
 import fr.stayze.utils.ResourceLoader;
 
 import java.util.HashMap;
@@ -9,33 +8,32 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
+public abstract class ViewRenderer {
 
-public class View {
+    private final String _PATH = "views/";
 
-    protected Map<String, String> data;
-
-    protected NanoHTTPD.Response render() {
-        System.out.println(this.data);
-
-        String html = this.format(ResourceLoader.loadFile("views/render.html", true), this.data);
-
+    protected String render(String template, HashMap<String, String> data) {
+        template = (template.contains(".html") ? template : template + ".html");
+        String html = this.format(ResourceLoader.loadFile(this._PATH + template, true), data);
         System.out.println(html);
-        return newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "text/html", html);
+        return html;
+    }
+
+    protected String render(String template) {
+        return this.render(template, null);
     }
 
     private String format(String html, Map<String, String> data) {
-        //System.out.println(html);
         Map<String, Integer> markers = this.findMarkers(html);
         if (markers.isEmpty()) return html;
         for (String marker : markers.keySet()) {
-            String str = (markers.get(marker) == 1 ? this.format(ResourceLoader.loadFile(this.getValueMarker(marker), true), data) : this.format(data.get(this.getValueMarker(marker)), data));
+            String str = (markers.get(marker) == 1 ? this.format(ResourceLoader.loadFile(this.getMarkerValue(marker), true), data) : this.format(data.get(this.getMarkerValue(marker)), data));
             html.replaceAll(marker, str);
         }
         return html;
     }
 
-    private String getValueMarker(String marker) {
+    private String getMarkerValue(String marker) {
         marker = marker.replaceAll(" ", "");
         return marker.substring(3, marker.length() - 2);
     }

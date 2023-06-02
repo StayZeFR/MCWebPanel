@@ -19,7 +19,7 @@ public class IndexPage extends Page {
         this.subData.put("NB_RAM", String.valueOf(Math.round((runtime.totalMemory() - runtime.freeMemory()) / 1048576.0)));
         this.subData.put("MAX_RAM", String.valueOf(Math.round(runtime.maxMemory() / 1048576.0)));*/
         //this.subData.put("USER", user.get("USERNAME"));
-        this.data.put("MAIN", ResourceLoader.loadFile("html/templates/index.html"));
+        this.data.put("MAIN", ResourceLoader.loadFile("views/templates/index.html"));
     }
 
     @Override

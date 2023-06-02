@@ -18,8 +18,8 @@ import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
 
 public abstract class Page extends View {
 
-    private final String renderFile = "html/render.html";
-    private final String templatesDir = "html/templates/";
+    private final String renderFile = "views/render.html";
+    private final String templatesDir = "views/templates/";
 
     protected Map<String, String> headers;
     protected NanoHTTPD.Response response;
